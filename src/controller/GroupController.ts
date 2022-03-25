@@ -24,8 +24,7 @@ export class GroupController {
         return results;
     }
 
-    async update(request: Request, response: Response, next: NextFunction) {
-        
+    async update(request: Request, response: Response, next: NextFunction) {  
         const results = this.groupRepository.update({group_id: request.params.group_id}, {
             name: request.body.name,
             description: request.body.description
@@ -35,6 +34,8 @@ export class GroupController {
 
     async remove(request: Request, response: Response, next: NextFunction) {
         let userToRemove = await this.groupRepository.findOne({ group_id: request.params.group_id })
+        // console.log(userToRemove);
+        
         const results = await this.groupRepository.remove(userToRemove)
         .catch(error => console.log(error))
         return {status: "success", deleted:results};

@@ -17,7 +17,7 @@ export const userRoutes = [{
     action: "save"
 }, {
     method: "put",
-    route: "/users",
+    route: "/users/:id",
     controller: UserController,
     action: "update"
 }, {

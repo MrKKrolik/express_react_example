@@ -15,6 +15,11 @@ export const createGroup = async (group) => {
 }
 
 export const updateGroup = async (id, group) => {
-    const {data} = await host.post('groups/' + id, group)
+    const {data} = await host.put('groups/' + id, group)
+    return data
+}
+
+export const deleteGroup = async (id) => {
+    const {data} = await host.delete('groups/' + id)
     return data
 }

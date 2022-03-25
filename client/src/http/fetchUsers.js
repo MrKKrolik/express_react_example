@@ -15,6 +15,12 @@ export const createUser = async (user) => {
 }
 
 export const updateUser = async (id, user) => {
-    const {data} = await host.post('users/' + id, user)
+    // console.log(user,id)
+    const {data} = await host.put('users/' + id, user)
+    return data
+}
+
+export const deleteUser = async (id) => {
+    const {data} = await host.delete('users/' + id)
     return data
 }
