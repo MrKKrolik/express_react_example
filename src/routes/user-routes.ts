@@ -7,7 +7,7 @@ export const userRoutes = [{
     action: "all"
 }, {
     method: "get",
-    route: "/users/:id",
+    route: "/users/:user_id",
     controller: UserController,
     action: "one"
 }, {
@@ -17,12 +17,12 @@ export const userRoutes = [{
     action: "save"
 }, {
     method: "put",
-    route: "/users/:id",
+    route: "/users/:user_id",
     controller: UserController,
     action: "update"
 }, {
     method: "delete",
-    route: "/users/:id",
+    route: "/users/:user_id",
     controller: UserController,
     action: "remove"
 }]
