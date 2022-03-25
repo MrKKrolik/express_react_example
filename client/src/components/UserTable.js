@@ -5,12 +5,14 @@ import { Context } from '../index'
 import {Container, Form, Row, Col}  from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import { fetchUsers, createUser, updateUser, deleteUser } from '../http/fetchUsers'
+import { fetchGroups } from '../http/fetchGroups'
 import ReadOnlyUserRow from './ReadOnlyUserRow'
 import EditableUserRow from './EditableUserRow'
 
 
 const UserTable = observer(() => {
     const {users} = useContext(Context)
+    const {groups} = useContext(Context)
     const [showAddUser, setShowAddUser] = useState(false)
     const [editUserId, setEditUserId] = useState(null)
     const [editUserValue, setEditUserValue] = useState({
@@ -19,13 +21,26 @@ const UserTable = observer(() => {
         group: ""
     }); 
     let [_users, setUsers] = useState(users.users)
+    let [_groups, setGroups] = useState(groups.groups)
+    let [groupId, setGroupId] = useState()
+
     useEffect(() => {
         fetchUsers().then(data => {
             users.setUsers(data)
             setUsers(users.users)
         }).catch(error => console.erro(error))
     }, [_users])
-    
+
+    useEffect(() => {
+        fetchGroups().then(data => {
+            groups.setGroups(data)
+            setGroups(groups.groups)
+        }).catch(error => console.erro(error))
+        if (_groups.length !== 0) {
+            setGroupId(_groups[0].group_id)
+        }
+    }, [_groups])
+
     const onSubmit = (event) => {
         let username = event.target.userNameInput.value;
         let group_id = event.target.userGroupInput.value;
@@ -57,6 +72,8 @@ const UserTable = observer(() => {
     
         setEditUserValue(newFormData);
     };
+
+    const handleGropChange = e => setGroupId(e.target.value);
 
     const onEditFormSave = (event, id) => {
         event.preventDefault();
@@ -135,11 +152,13 @@ const UserTable = observer(() => {
                     />
                 </Col>
                 <Col>
-                    <Form.Control 
-                        className="mb-2"
-                        id="userGroupInput"
-                        placeholder="grouop"
-                    />
+                    <Form.Select 
+                        onChange={handleGropChange}
+                    >
+                        {_groups.map(group => {
+                            return (<option key={group.group_id} value={group.group_id}>{group.name}</option>)
+                        })}
+                    </Form.Select>
                 </Col>
                 <Col xs="auto">
                     <Button variant="outline-primary" type="submit">Submit</Button>{' '}        
