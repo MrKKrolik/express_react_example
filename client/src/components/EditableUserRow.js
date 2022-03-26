@@ -1,7 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Button } from "react-bootstrap";
-
+import { Form } from "react-bootstrap";
+import { Context } from "../index";
+import { fetchGroups } from "../http/fetchGroups";
 const EditableUserRow = ({ editUserValue, handleEidtUserChange, onEditFormSave, onCancel }) => {
+  const {groups} = useContext(Context)
   return (
     <tr>
         <td>{editUserValue.user_id}</td>
@@ -16,13 +19,15 @@ const EditableUserRow = ({ editUserValue, handleEidtUserChange, onEditFormSave, 
         ></input>
         </td>
         <td>
-        <input
-          type="text"
-          placeholder="Choose a group"
+        <Form.Select
           name="group"
-          value={editUserValue.group_id}
+          
           onChange={handleEidtUserChange}
-        ></input>
+        >
+          {groups.groups.map(group => {
+              return (<option key={group.group_id} value={group.group_id}>{group.name}</option>)
+          })}
+        </Form.Select>
         </td>
         <td>{editUserValue.created}</td>
         <td>

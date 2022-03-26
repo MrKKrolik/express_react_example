@@ -31,11 +31,9 @@ export class UserController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne({ user_id: request.params.user_id })
-        .catch(error => console.log(error));
-        console.log(userToRemove,request.params.user_id);
-        // const results = await this.userRepository.remove(userToRemove);
-        // return {status: "success", deleted:results};
+        let userToRemove = await this.userRepository.findOne({ user_id: request.params.user_id });
+        const results = await this.userRepository.remove(userToRemove).catch(err => console.error(err));
+        return {status: "success", deleted:results};
     }
 
 }

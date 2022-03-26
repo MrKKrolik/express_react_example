@@ -22,8 +22,6 @@ const UserTable = observer(() => {
     }); 
     let [_users, setUsers] = useState(users.users)
     let [_groups, setGroups] = useState(groups.groups)
-    let [groupId, setGroupId] = useState()
-
     useEffect(() => {
         fetchUsers().then(data => {
             users.setUsers(data)
@@ -36,17 +34,19 @@ const UserTable = observer(() => {
             groups.setGroups(data)
             setGroups(groups.groups)
         }).catch(error => console.erro(error))
-        if (_groups.length !== 0) {
-            setGroupId(_groups[0].group_id)
-        }
+        
     }, [_groups])
 
     const onSubmit = (event) => {
+        // event.preventDefault()
         let username = event.target.userNameInput.value;
-        let group_id = event.target.userGroupInput.value;
-        // e.preventDefault()
+        let group_id = event.target.selectGroup.value;
         createUser({username, group_id}).then()
         .catch(err => console.error(err))
+    }
+    
+    const getGroupName = (id, groups) => {
+        
     }
 
     const onEdit = (event, user) => {
@@ -59,26 +59,23 @@ const UserTable = observer(() => {
             created: user.created
         }
         setEditUserValue(formValues)
-      
     }
 
     const handleEidtUserChange = (event) => {
     
         const fieldName = event.target.getAttribute("name");
         const fieldValue = event.target.value;
-    
+        
         const newFormData = { ...editUserValue };
         newFormData[fieldName] = fieldValue;
-    
+        
         setEditUserValue(newFormData);
     };
 
-    const handleGropChange = e => setGroupId(e.target.value);
-
     const onEditFormSave = (event, id) => {
         event.preventDefault();
-        // console.log(editGroupValue);
-        updateUser(editUserValue.user_id, {username: editUserValue.username, group_id: editUserValue.group_id}).then()
+        // console.log(editUserValue);
+        updateUser(editUserValue.user_id, {username: editUserValue.username, group_id: editUserValue.group}).then()
         .catch(err => console.error(err))
         fetchUsers().then(data => {
             users.setUsers(data)
@@ -113,16 +110,18 @@ const UserTable = observer(() => {
             </thead>
             <tbody>
             {_users.map((user) => (
+                
                 <Fragment>
                     { editUserId === user.user_id ?
                     (
-                    <EditableUserRow 
+                    <EditableUserRow
                         editUserValue={editUserValue}
                         handleEidtUserChange={handleEidtUserChange}
                         onEditFormSave={onEditFormSave}
                         onCancel={onCancel}
                     />   
                     ) : (
+                    
                     <ReadOnlyUserRow
                         user={user}
                         onEdit={onEdit}
@@ -153,7 +152,7 @@ const UserTable = observer(() => {
                 </Col>
                 <Col>
                     <Form.Select 
-                        onChange={handleGropChange}
+                        id="selectGroup"
                     >
                         {_groups.map(group => {
                             return (<option key={group.group_id} value={group.group_id}>{group.name}</option>)
