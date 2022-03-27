@@ -44,10 +44,6 @@ const UserTable = observer(() => {
         createUser({username, group_id}).then()
         .catch(err => console.error(err))
     }
-    
-    const getGroupName = (id, groups) => {
-        
-    }
 
     const onEdit = (event, user) => {
         event.preventDefault()

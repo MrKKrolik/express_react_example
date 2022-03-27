@@ -3,6 +3,8 @@ services:
 
   mysql:
     image: "mysql:5.7.10"
+    container_name: mysql
+    hostname: mysql
     ports:
       - "3306:3306"
     environment:
@@ -10,4 +12,27 @@ services:
       MYSQL_USER: "test"
       MYSQL_PASSWORD: "test"
       MYSQL_DATABASE: "test"
+
+  server:
+    build: ./server
+    ports:
+      - 5000:5000
+    links:
+      - mysql
+    volumes:
+      - ./server:/usr/src/server-app
+      - /usr/src/server-app/node_modules
+    depends_on:
+      - mysql
+    restart: always
+
+  client:
+    build: ./client
+    ports:
+      - 3000:3000
+    # volumes:
+      # - ./cilent:/usr/src/client-app
+      # - /usr/src/client-app/node_modules
+    depends_on:
+      - server
 
