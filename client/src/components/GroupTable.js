@@ -19,6 +19,8 @@ const GroupTable = observer(() => {
         description: ""
     }); 
     let [_groups, setGroups] = useState(groups.groups)
+
+    // hook to update groups list when table rendered
     useEffect(() => {
         fetchGroups().then(data => {
             groups.setGroups(data)
@@ -26,6 +28,7 @@ const GroupTable = observer(() => {
         }).catch(error => console.erro(error))
     }, [_groups])
     
+    // write to the db values from form,(add group)
     const onSubmit = (event) => {
         let name = event.target.groupNameInput.value;
         let description = event.target.groupDescriptionInput.value;
@@ -34,6 +37,7 @@ const GroupTable = observer(() => {
         .catch(err => console.error(err))
     }
 
+    // need to open edit form in table
     const onEdit = (event, group) => {
         event.preventDefault()
         setEditGroupId(group.group_id)
@@ -46,6 +50,7 @@ const GroupTable = observer(() => {
       
     }
 
+    // listner to update users object
     const handleEidtGroupChange = (event) => {
     
         const fieldName = event.target.getAttribute("name");
@@ -57,6 +62,7 @@ const GroupTable = observer(() => {
         setEidtGroupValue(newFormData);
     };
 
+    // update on db group, (edit button)
     const onEditFormSave = (event, id) => {
         event.preventDefault();
         // console.log(editGroupValue);

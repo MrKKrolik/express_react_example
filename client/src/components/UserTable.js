@@ -22,6 +22,8 @@ const UserTable = observer(() => {
     }); 
     let [_users, setUsers] = useState(users.users)
     let [_groups, setGroups] = useState(groups.groups)
+
+    // hook to update users list when table rendered
     useEffect(() => {
         fetchUsers().then(data => {
             users.setUsers(data)
@@ -29,6 +31,7 @@ const UserTable = observer(() => {
         }).catch(error => console.erro(error))
     }, [_users])
 
+    // hook to update groups list when table rendered
     useEffect(() => {
         fetchGroups().then(data => {
             groups.setGroups(data)
@@ -37,6 +40,7 @@ const UserTable = observer(() => {
         
     }, [_groups])
 
+    // write to the db values from form,(add user)
     const onSubmit = (event) => {
         // event.preventDefault()
         let username = event.target.userNameInput.value;
@@ -44,7 +48,8 @@ const UserTable = observer(() => {
         createUser({username, group_id}).then()
         .catch(err => console.error(err))
     }
-
+    
+    // need to open edit form in table
     const onEdit = (event, user) => {
         event.preventDefault()
         setEditUserId(user.user_id)
@@ -57,6 +62,7 @@ const UserTable = observer(() => {
         setEditUserValue(formValues)
     }
 
+    // listner to update users object
     const handleEidtUserChange = (event) => {
     
         const fieldName = event.target.getAttribute("name");
@@ -68,9 +74,9 @@ const UserTable = observer(() => {
         setEditUserValue(newFormData);
     };
 
+    // update on db user, (edit button)
     const onEditFormSave = (event, id) => {
         event.preventDefault();
-        // console.log(editUserValue);
         updateUser(editUserValue.user_id, {username: editUserValue.username, group_id: editUserValue.group}).then()
         .catch(err => console.error(err))
         fetchUsers().then(data => {
@@ -79,9 +85,11 @@ const UserTable = observer(() => {
         }).catch(err => console.erro(err))
         setEditUserId(null)
     }
+
     const onCancel = () => {
         setEditUserId(null)
     }
+
     const onDelete = (userId) => {
         deleteUser(userId).then()
         .catch(err => console.error(err))
@@ -90,6 +98,7 @@ const UserTable = observer(() => {
             setUsers(users.users)
         }).catch(err => console.erro(err))
     }
+
     const addUser = () => setShowAddUser(true)
 
     return (
@@ -117,7 +126,6 @@ const UserTable = observer(() => {
                         onCancel={onCancel}
                     />   
                     ) : (
-                    
                     <ReadOnlyUserRow
                         user={user}
                         onEdit={onEdit}

@@ -8,8 +8,7 @@ import * as cors from "cors"
 import {Request, Response} from "express";
 import {groupRoutes} from "./routes/group-routes";
 import {userRoutes} from "./routes/user-routes";
-import {Group} from "./entity/Group";
-import {User} from "./entity/User";
+import errorMiddleware from './middleware/error.middleware';
 
 createConnection().then(async connection => {
 
@@ -18,7 +17,7 @@ createConnection().then(async connection => {
     app.use(cors());
     app.use(bodyParser.json());
 
-    // register express routes from defined application routes
+    // register users routes from defined userRoutes
     userRoutes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next);
@@ -31,6 +30,7 @@ createConnection().then(async connection => {
         });
     });
 
+    // register groups routes from defined groupRoutes
     groupRoutes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next);
@@ -45,6 +45,10 @@ createConnection().then(async connection => {
 
     // setup express app here
     app.use(express.static(path.join(__dirname, "../client/build/index.html")));
+
+    // setup middleware
+    app.use(errorMiddleware);
+    
     const { PORT = 5000 } = process.env;
     const server = http.createServer(app);
     // start express server

@@ -4,6 +4,7 @@ import { Context } from "../index";
 
 const ReadOnlyUserRow = ({ user, onEdit, onDelete }) => {
   const {groups} = useContext(Context)
+  // get groups name from lsit by id  
   const gruopName = () => {
     for (const group of groups.groups) {
       if (group.group_id === user.group_id)

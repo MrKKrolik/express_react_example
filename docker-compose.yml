@@ -30,9 +30,6 @@ services:
     build: ./client
     ports:
       - 3000:3000
-    # volumes:
-      # - ./cilent:/usr/src/client-app
-      # - /usr/src/client-app/node_modules
     depends_on:
       - server
 
